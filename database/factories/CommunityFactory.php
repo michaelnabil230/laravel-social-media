@@ -15,7 +15,7 @@ class CommunityFactory extends Factory
     {
         return [
             'name' => $this->faker->text(30),
-            'user_id' => rand(1, 100),
+            'user_id' => $this->faker->numberBetween(1, 100),
             'description' => $this->faker->text(200),
         ];
     }

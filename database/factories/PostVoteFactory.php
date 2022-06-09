@@ -16,8 +16,8 @@ class PostVoteFactory extends Factory
         $votes = [-1, 1];
 
         return [
-            'post_id' => rand(1, 200),
-            'user_id' => rand(1, 100),
+            'post_id' => $this->faker->numberBetween(1, 200),
+            'user_id' => $this->faker->numberBetween(1, 100),
             'vote' => $votes[rand(0, 1)],
         ];
     }
