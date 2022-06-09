@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
+Artisan::command('project:init', function () {
+    Artisan::call('migrate:refresh');
+    $this->info(Artisan::output());
+
+    Artisan::call('db:seed');
+    $this->info(Artisan::output());
+
+    Artisan::call('storage:link');
+    $this->info(Artisan::output());
+
+    Artisan::call('optimize:clear');
+    $this->info(Artisan::output());
+})->purpose('Running commands');
+
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');

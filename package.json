@@ -11,6 +11,8 @@
     },
     "devDependencies": {
         "axios": "^0.25",
+        "laravel-echo": "^1.11.7",
+        "socket.io-client": "^4.5.1",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14"
