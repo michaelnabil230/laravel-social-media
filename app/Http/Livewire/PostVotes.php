@@ -25,13 +25,13 @@ class PostVotes extends Component
     public function vote($vote)
     {
         if (
-            !$this->post->postVotes->where('user_id', auth()->id())->count()
+            ! $this->post->postVotes->where('user_id', auth()->id())->count()
             && in_array($vote, [-1, 1]) && $this->post->user_id != auth()->id()
         ) {
             PostVote::create([
                 'post_id' => $this->post->id,
                 'user_id' => auth()->id(),
-                'vote' => $vote
+                'vote' => $vote,
             ]);
 
             $this->sumVotes += $vote;

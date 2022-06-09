@@ -21,7 +21,7 @@ class UsersSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin-password'),
             'email_verified_at' => now(),
-            'is_admin' => true
+            'is_admin' => true,
         ])->create();
 
         User::factory()->times(100)->create();

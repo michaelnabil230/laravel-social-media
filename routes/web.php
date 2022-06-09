@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\CommunityPostController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostCommentController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CommunityController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\CommunityPostController;
 
 /*
 |--------------------------------------------------------------------------

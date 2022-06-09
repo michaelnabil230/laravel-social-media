@@ -15,7 +15,7 @@ class PostCommentController
 
         $post->comments()->create([
             'user_id' => auth()->id(),
-            'comment' => $request->comment
+            'comment' => $request->comment,
         ]);
 
         return to_route('communities.posts.show', $post);

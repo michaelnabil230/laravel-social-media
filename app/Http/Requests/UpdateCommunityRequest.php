@@ -28,7 +28,7 @@ class UpdateCommunityRequest extends FormRequest
             'name' => [
                 'required',
                 'min:3',
-                Rule::unique('communities')->ignore($this->community)
+                Rule::unique('communities')->ignore($this->community),
             ],
             'description' => ['required', 'max:500'],
             'topics' => ['required', 'min:2', 'array', 'exists:topics,id'],
