@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MarkNotificationsController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CommunityController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\MarkNotificationsController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController as ProfileSettingsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

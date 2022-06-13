@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Comment;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Post;
 
 class PostCommentController extends Controller
 {

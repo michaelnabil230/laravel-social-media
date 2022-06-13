@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Topic;
-use App\Models\Community;
-use Illuminate\Http\Request;
-use App\Policies\CommunityPolicy;
 use App\Http\Requests\StoreCommunityRequest;
 use App\Http\Requests\UpdateCommunityRequest;
+use App\Models\Community;
+use App\Models\Topic;
+use App\Policies\CommunityPolicy;
+use Illuminate\Http\Request;
 
 class CommunityController extends Controller
 {
@@ -68,6 +68,7 @@ class CommunityController extends Controller
         $community->topics()->sync($request->topics);
 
         $this->success('Successfully updated');
+
         return to_route('communities.index');
     }
 
@@ -78,6 +79,7 @@ class CommunityController extends Controller
         $community->delete();
 
         $this->success('Successfully deleted');
+
         return to_route('communities.index');
     }
 
@@ -88,6 +90,7 @@ class CommunityController extends Controller
         $community->users()->attach(auth()->id());
 
         $this->success('Successfully joined');
+
         return to_route('communities.show', $community);
     }
 
@@ -98,6 +101,7 @@ class CommunityController extends Controller
         $community->users()->detach(auth()->id());
 
         $this->success('Successfully left');
+
         return to_route('communities.show', $community);
     }
 }

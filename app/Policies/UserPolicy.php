@@ -19,11 +19,11 @@ class UserPolicy
 
     public function ban(User $user, User $subject): bool
     {
-        return $user->is_admin && !$subject->is_admin;
+        return $user->is_admin && ! $subject->is_admin;
     }
 
     public function delete(User $user, User $subject): bool
     {
-        return ($user->is_admin || $user->is($subject)) && !$subject->is_admin;
+        return ($user->is_admin || $user->is($subject)) && ! $subject->is_admin;
     }
 }

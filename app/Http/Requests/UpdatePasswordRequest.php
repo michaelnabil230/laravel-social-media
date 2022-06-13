@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Rules\MatchOldPassword;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class UpdatePasswordRequest extends FormRequest
 {

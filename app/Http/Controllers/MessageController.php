@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +13,7 @@ class MessageController extends Controller
 {
     public function pusherAuth()
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -132,7 +132,7 @@ class MessageController extends Controller
         return response()->json([
             'users' => $getUsers,
             'total' => $users->total(),
-            'last_page' => $users->lastPage()
+            'last_page' => $users->lastPage(),
         ]);
     }
 

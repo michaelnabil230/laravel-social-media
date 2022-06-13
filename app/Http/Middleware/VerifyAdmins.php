@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Models\User;
 use App\Policies\UserPolicy;
+use Closure;
 use Illuminate\Http\Request;
 
 class VerifyAdmins
@@ -18,7 +18,7 @@ class VerifyAdmins
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
-        if (!auth()->guard($guard)->user()->can(UserPolicy::ADMIN, User::class)) {
+        if (! auth()->guard($guard)->user()->can(UserPolicy::ADMIN, User::class)) {
             abort(403);
         }
 

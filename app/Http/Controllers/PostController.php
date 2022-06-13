@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Community;
-use App\Policies\PostPolicy;
 use App\Http\Requests\StorePostRequest;
+use App\Models\Community;
+use App\Models\Post;
 use App\Notifications\PostReportNotification;
+use App\Policies\PostPolicy;
 
 class PostController extends Controller
 {

@@ -16,7 +16,7 @@ class MessageObserver
     public function deleting(Message $message)
     {
         if ($message->from_id == auth()->id()) {
-            if (!is_null($message->attachment)) {
+            if (! is_null($message->attachment)) {
                 if (Storage::exists($message->attachment)) {
                     Storage::delete($message->attachment);
                 }

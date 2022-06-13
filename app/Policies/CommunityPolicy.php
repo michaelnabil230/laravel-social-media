@@ -27,7 +27,7 @@ class CommunityPolicy
 
     public function join(User $user, Community $community): bool
     {
-        return !$community->users()->where('user_id', $user->id)->exists();
+        return ! $community->users()->where('user_id', $user->id)->exists();
     }
 
     public function leave(User $user, Community $community): bool

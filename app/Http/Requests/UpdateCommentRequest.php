@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\HttpImageRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCommentRequest extends FormRequest
