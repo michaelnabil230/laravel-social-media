@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
+use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
 
-class RedirectIfIsNotAdmin
+class VerifyAdmins
 {
     /**
      * Handle an incoming request.
@@ -14,10 +16,10 @@ class RedirectIfIsNotAdmin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        if (! auth()->user()->is_admin) {
-            return to_route('home');
+        if (!auth()->guard($guard)->user()->can(UserPolicy::ADMIN, User::class)) {
+            abort(403);
         }
 
         return $next($request);

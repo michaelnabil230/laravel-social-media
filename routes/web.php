@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
 
 
         // Admin
-        Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::middleware('verifyAdmins')->prefix('admin')->name('admin.')->group(function () {
             Route::controller(UserController::class)->name('users.')->group(function () {
                 // Users
                 Route::get('users', 'index')->name('index');
