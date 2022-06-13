@@ -76,4 +76,14 @@ class Community extends Model
     {
         return $this->hasMany(Post::class);
     }
+
+    /**
+     * The users that belong to the Community
+     *
+     * @return BelongsToMany
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

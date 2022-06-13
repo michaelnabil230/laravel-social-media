@@ -11,12 +11,13 @@
         "laravel/horizon": "^5.9",
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^3.4",
         "livewire/livewire": "^2.10",
         "predis/predis": "^2.0",
-        "spatie/laravel-sluggable": "^3.4"
+        "spatie/laravel-sluggable": "^3.4",
+        "yarri/link-finder": "^2.7"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
@@ -29,7 +30,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

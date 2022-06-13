@@ -17,7 +17,7 @@ class PostFactory extends Factory
             'community_id' => $this->faker->numberBetween(1, 50),
             'user_id' => $this->faker->numberBetween(1, 100),
             'title' => $this->faker->text(50),
-            'post' => $this->faker->text(500),
+            'body' => $this->faker->text(500),
         ];
     }
 }

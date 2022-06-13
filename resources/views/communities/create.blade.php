@@ -1,66 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card">
-        <div class="card-header">{{ __('New Community') }}</div>
+    <x-validation-errors class="mb-4" :errors="$errors" />
 
-        <div class="card-body">
-            <form method="POST" action="{{ route('communities.store') }}">
-                @csrf
+    <form method="POST" action="{{ route('communities.store') }}" class="space-y-6">
+        @csrf
 
-                <div class="form-group row">
-                    <label for="name" class="col-md-4 col-form-label text-md-right">
-                        {{ __('Name') }}*
-                    </label>
-
-                    <div class="col-md-6">
-                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                            value="{{ old('name') }}" required autocomplete="name" autofocus>
-                        @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="description" class="col-md-4 col-form-label text-md-right">
-                        {{ __('Description') }}*
-                    </label>
-
-                    <div class="col-md-6">
-                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" required>{{ old('description') }}</textarea>
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="topics" class="col-md-4 col-form-label text-md-right">{{ __('Topics') }}</label>
-
-                    <div class="col-md-6">
-                        <select name="topics[]" multiple class="form-control select2">
-                            @foreach ($topics as $topic)
-                                <option value="{{ $topic->id }}" @selected(in_array($topic->id, old('topics', [])))>
-                                    {{ $topic->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-primary">
-                            {{ __('Create Community') }}
-                        </button>
-                    </div>
-                </div>
-            </form>
+        <div class="mb-4">
+            <x-forms.label for="name">
+                Name
+            </x-forms.label>
+            <x-forms.inputs.input type="text" :value="old('name')" name="name" id="name" required />
         </div>
-    </div>
+
+        <div class="grow space-y-6">
+            <div class="space-y-1">
+                <x-forms.label for="topics">
+                    Topics
+                </x-forms.label>
+                <select name="topics[]" multiple x-init="$nextTick(function() { choices($el) })">
+                    @foreach ($topics as $topic)
+                        <option value="{{ $topic->id }}" @selected(in_array($topic->id, old('topics', [])))>
+                            {{ $topic->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="grow space-y-6">
+            <div class="space-y-1">
+                <x-forms.label for="description">
+                    Description
+                </x-forms.label>
+                <x-forms.inputs.textarea :value="old('description')" name="description" id="description" required />
+            </div>
+        </div>
+
+        <x-buttons.primary-button>
+            Create Community
+        </x-buttons.primary-button>
+    </form>
 @endsection

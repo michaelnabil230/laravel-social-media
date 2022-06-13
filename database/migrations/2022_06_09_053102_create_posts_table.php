@@ -18,9 +18,7 @@ return new class extends Migration
             $table->foreignId('community_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('title');
-            $table->text('post')->nullable();
-            $table->text('image')->nullable();
-            $table->text('url')->nullable();
+            $table->text('body')->nullable();
             $table->integer('votes')->default(0);
             $table->timestamps();
             $table->softDeletes();

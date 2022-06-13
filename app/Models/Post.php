@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
+use Illuminate\Support\Collection;
 
 class Post extends Model
 {
@@ -23,8 +25,6 @@ class Post extends Model
         'user_id',
         'title',
         'post',
-        'image',
-        'url',
         'votes',
     ];
 
@@ -66,5 +66,32 @@ class Post extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class)->latest();
+    }
+
+    /**
+     * Get the user that owns the Post
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeNormal($query)
+    {
+        return $query
+            ->with(['community', 'user:id,name,username'])
+            ->withCount(['comments', 'postVotes' => function ($query) {
+                $query->where('post_votes.created_at', '>', now()->subDays(7))->where('vote', 1);
+            }])
+            ->latest('post_votes_count');
+    }
+
+    public function mentionedUsers(): Collection
+    {
+        preg_match_all('/@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w))/', $this->post, $matches);
+
+        return User::whereIn('username', $matches[1])->get();
     }
 }

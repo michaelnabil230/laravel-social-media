@@ -45,7 +45,7 @@ class PostReportNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->line('Post in your community has been flagged')
-            ->action('View Post', route('communities.posts.show', $this->post))
+            ->action('View Post', route('posts.show', $this->post))
             ->line('Thank you for using our application!');
     }
 }

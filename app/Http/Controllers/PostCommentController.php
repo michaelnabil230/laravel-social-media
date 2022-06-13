@@ -3,21 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Models\Comment;
+use App\Http\Requests\UpdateCommentRequest;
 
-class PostCommentController
+class PostCommentController extends Controller
 {
-    public function __invoke(Request $request, Post $post)
+    public function store(UpdateCommentRequest $request, Post $post)
     {
-        $request->validate([
-            'comment' => ['required', 'string', 'max:255'],
-        ]);
-
         $post->comments()->create([
             'user_id' => auth()->id(),
-            'comment' => $request->comment,
+            'body' => $request->body,
         ]);
 
-        return to_route('communities.posts.show', $post);
+        $this->success('Comment add successfully.');
+
+        return to_route('posts.show', $post);
+    }
+
+    public function delete(Post $post, Comment $comment)
+    {
+        $comment->delete();
+
+        $this->success('Comment deleted successfully.');
+
+        return to_route('posts.show', $post);
     }
 }

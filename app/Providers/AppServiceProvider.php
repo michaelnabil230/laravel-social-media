@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Community;
-use App\Models\Post;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,11 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Paginator::useBootstrap();
+        Blade::directive('title', function ($expression) {
+            return "<?php \$title = $expression ?>";
+        });
 
-        if (! app()->runningInConsole()) {
-            View::share('newestPosts', Post::with('community')->latest()->take(5)->get());
-            View::share('newestCommunities', Community::withCount('posts')->latest()->take(5)->get());
-        }
+        Blade::directive('md', function ($expression) {
+            return "<?php echo md_to_html($expression); ?>";
+        });
     }
 }

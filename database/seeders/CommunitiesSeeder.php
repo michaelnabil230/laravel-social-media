@@ -14,6 +14,6 @@ class CommunitiesSeeder extends Seeder
      */
     public function run()
     {
-        Community::factory()->times(50)->create();
+        Community::factory()->times(400)->create();
     }
 }

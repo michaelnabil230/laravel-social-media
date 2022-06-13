@@ -25,9 +25,8 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'post' => ['required', 'string', 'max:255'],
-            'url' => ['sometimes', 'nullable', 'url'],
-            'image' => ['sometimes', 'nullable', 'image'],
+            'body' => ['required', 'string', 'max:255'],
+            'community_id' => ['required', 'integer', 'exists:communities,id'],
         ];
     }
 }

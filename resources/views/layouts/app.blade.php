@@ -1,136 +1,187 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>
+        {{ isset($title) ? $title . ' | ' : '' }}
+        {{ config('app.name', 'Laravel') }}
+    </title>
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
-
-    <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     @livewireStyles
+
 </head>
 
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+<body class="bg-gray-50 text-gray-600 body-font" :class="{ 'overflow-hidden': lockScroll }" x-data="{ lockScroll: false, activeModal: false }"
+    @keyup.escape="activeModal = false">
+    <header x-data="{ nav: false }" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+        <div class="px-4 py-5 mx-auto space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:space-x-10">
+            <div class="flex justify-between">
+                <a href="/" class="text-gray-800 dark:text-gray-200">
+                    <p class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                        {{ config('app.name') }}
+                    </p>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('communities.index') }}">
-                                        {{ __('My Communities') }}
+                <div class="flex items-center space-x-2 lg:hidden">
+                    <button @click="nav=!nav"
+                        class="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none">
+                        <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 text-gray-700 dark:text-gray-300">
+                            <path fill-rule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="flex flex-col space-y-4 lg:hidden" x-show="nav">
+                <div class="flex flex-col space-y-3 lg:space-y-0 lg:flex-row lg:space-x-6 xl:space-x-8 lg:items-center">
+                    <a href="{{ route('home') }}"
+                        class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                        Home
+                    </a>
+                    <a href="{{ route('communities.index') }}"
+                        class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                        Communities
+                    </a>
+                    @auth
+                        <div class="flex flex-col space-y-3 lg:hidden">
+                            <a href="{{ route('settings.profile') }}"
+                                class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400">
+                                Edit Profile
+                            </a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button
+                                    class="flex items-center space-x-3 text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                        </path>
+                                    </svg>
+                                    <span>Log Out</span>
+                                </button>
+                            </form>
+                        </div>
+                    @endauth
+                </div>
+                <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
+                    <button type="button" aria-label="Color Mode"
+                        class="flex justify-center p-2 text-gray-500 transition duration-150 ease-in-out bg-gray-100 border border-transparent rounded-md lg:bg-white lg:dark:bg-gray-900 dark:text-gray-200 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            class="w-5 h-5 transform -rotate-90">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                    <form action="/search" class="flex flex-wrap justify-between md:flex-row">
+                        <input type="search" name="query" placeholder="Search" required="required"
+                            class="w-full h-12 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg lg:w-20 xl:transition-all xl:duration-300 xl:w-36 xl:focus:w-44 lg:h-10 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-500 focus:outline-none focus:ring focus:ring-green-500 dark:placeholder-gray-400 focus:ring-opacity-20">
+                    </form>
+                    @guest
+                        <a href="{{ route('register') }}"
+                            class="flex items-center justify-center h-12 px-4 text-sm font-medium text-center text-white transition-colors duration-300 transform rounded-md lg:h-10 bg-green-500 hover:bg-green-500/70">
+                            Register
+                        </a>
+                        <a href="{{ route('login') }}"
+                            class="flex items-center justify-center h-12 px-4 mt-2 text-sm text-center text-gray-600 transition-colors duration-300 transform border rounded-lg lg:h-10 dark:text-gray-300 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                            Login
+                        </a>
+                    @endguest
+                </div>
+            </div>
+            <div class="hidden lg:flex lg:flex-row lg:items-center lg:justify-between lg:flex-1 lg:space-x-2">
+                <div class="flex flex-col space-y-3 lg:space-y-0 lg:flex-row lg:space-x-6 xl:space-x-8 lg:items-center">
+                    <a href="{{ route('home') }}"
+                        class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                        Home
+                    </a>
+                    <a href="{{ route('communities.index') }}"
+                        class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                        Communities
+                    </a>
+                </div>
+                <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
+                    <button type="button" aria-label="Color Mode"
+                        class="flex justify-center p-2 text-gray-500 transition duration-150 ease-in-out bg-gray-100 border border-transparent rounded-md lg:bg-white lg:dark:bg-gray-900 dark:text-gray-200 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            class="w-5 h-5 transform -rotate-90">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                    <form action="/search" class="flex flex-wrap justify-between md:flex-row">
+                        <input type="search" name="query" placeholder="Search" required="required"
+                            class="w-full h-12 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg lg:w-20 xl:transition-all xl:duration-300 xl:w-36 xl:focus:w-44 lg:h-10 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-500 focus:outline-none focus:ring focus:ring-green-500 dark:placeholder-gray-400 focus:ring-opacity-20">
+                    </form>
+                    @auth
+                        <div class="relative lg:inline-block" x-data="{ dropDown: false }">
+                            <div>
+                                <button @click="dropDown=!dropDown" class="flex items-center space-x-2 focus:outline-none">
+                                    <img src="https://www.gravatar.com/avatar/d9b562166e42a7cff1422818760c9e43"
+                                        class="object-cover w-8 h-8 rounded-full xl:w-10 xl:h-10">
+                                    <span class="font-medium text-gray-800 dark:text-gray-200 lg:hidden">
+                                        {{ auth()->user()->name }}
+                                    </span>
+                                </button>
+                            </div>
+                            <div :class="{ 'hidden': !dropDown }"
+                                class="absolute left-0 z-20 py-1 mt-2 bg-white border border-gray-100 rounded-md shadow-xl dark:border-gray-700 lg:left-auto lg:right-0 dark:bg-gray-800">
+                                <div class="w-48">
+                                    <a href="{{ route('profile', auth()->user()->username) }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:text-primary dark:hover:text-primary">
+                                        Signed in as
+                                        <br>
+                                        <span class="font-medium">{{ auth()->user()->name }}</span>
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                    <a href="{{ route('settings.profile') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:text-primary dark:hover:text-primary">
+                                        Edit Profile
                                     </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        class="d-none">
+                                    <hr class="border-gray-200 dark:border-gray-700">
+                                    <form action="{{ route('logout') }}" method="POST" class="leading-none">
                                         @csrf
+                                        <button
+                                            class="flex items-center px-4 py-2 space-x-3 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary focus:outline-none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                                </path>
+                                            </svg>
+                                            <span>Log Out</span>
+                                        </button>
                                     </form>
                                 </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        @yield('content')
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header">Newest posts</div>
-                            <div class="card-body">
-                                @foreach ($newestPosts as $post)
-                                    <a href="{{ route('communities.posts.show', $post) }}">
-                                        {{ $post->title }}
-                                    </a>
-                                    <div class="mt-1">{{ $post->created_at->diffForHumans() }}</div>
-                                    @if (!$loop->last)
-                                        <hr />
-                                    @endif
-                                @endforeach
                             </div>
                         </div>
-
-                        <div class="card mt-4">
-                            <div class="card-header">Newest communities</div>
-
-                            <div class="card-body">
-                                @foreach ($newestCommunities as $community)
-                                    <a href="{{ route('communities.show', $community) }}">
-                                        {{ $community->name }}
-                                    </a>
-                                    ({{ $community->posts_count }} posts)
-                                    <div class="mt-1">{{ $community->created_at->diffForHumans() }}</div>
-                                    @if (!$loop->last)
-                                        <hr />
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
+                    @else
+                        <x-buttons.primary-button href="{{ route('register') }}">
+                            Register
+                        </x-buttons.primary-button>
+                        <span class="inline-flex rounded-md shadow-sm">
+                            <a href="{{ route('login') }}"
+                                class="rounded py-2 px-4 inline-flex justify-center text-base text-black focus:outline-none border dark:text-gray-300 dark:border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium">
+                                Login
+                            </a>
+                        </span>
+                    @endauth
                 </div>
             </div>
-        </main>
+        </div>
+    </header>
+
+    <div class="container mx-auto">
+        @include('layouts._alerts')
+        @yield('content')
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    @livewireScripts
+    @stack('modals')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
     <script src="{{ mix('js/app.js') }}"></script>
     <script type="text/javascript">
@@ -142,12 +193,6 @@
                 console.log(e);
             });
     </script>
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-    </script>
-    @livewireScripts
 </body>
 
 </html>

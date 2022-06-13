@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Topic;
+use App\Models\Community;
+use Illuminate\Http\Request;
+use App\Policies\CommunityPolicy;
 use App\Http\Requests\StoreCommunityRequest;
 use App\Http\Requests\UpdateCommunityRequest;
-use App\Models\Community;
-use App\Models\Topic;
-use Illuminate\Http\Request;
 
 class CommunityController extends Controller
 {
     public function index()
     {
-        $communities = auth()->user()->communities();
+        $communities = Community::get();
 
         return view('communities.index', compact('communities'));
     }
@@ -26,7 +27,7 @@ class CommunityController extends Controller
 
     public function store(StoreCommunityRequest $request)
     {
-        $community = Community::create($request->validated()->marge(['user_id' => auth()->id()]));
+        $community = Community::create($request->validated() + ['user_id' => auth()->id()]);
         $community->topics()->attach($request->topics);
 
         return to_route('communities.show', $community);
@@ -34,9 +35,11 @@ class CommunityController extends Controller
 
     public function show(Request $request, Community $community)
     {
+        $community->loadCount('users');
+
         $posts = $community
             ->posts()
-            ->with('postVotes')
+            ->normal()
             ->when($request->sort === 'popular', function ($query) {
                 $query->orderBy('votes', 'desc');
             }, function ($query) {
@@ -49,7 +52,7 @@ class CommunityController extends Controller
 
     public function edit(Community $community)
     {
-        abort_if($community->user_id != auth()->id(), 403);
+        $this->authorize(CommunityPolicy::UPDATE, $community);
 
         $topics = Topic::all();
         $community->load('topics');
@@ -59,20 +62,42 @@ class CommunityController extends Controller
 
     public function update(UpdateCommunityRequest $request, Community $community)
     {
-        abort_if($community->user_id != auth()->id(), 403);
+        $this->authorize(CommunityPolicy::UPDATE, $community);
 
         $community->update($request->validated());
         $community->topics()->sync($request->topics);
 
-        return to_route('communities.index')->with('message', 'Successfully updated');
+        $this->success('Successfully updated');
+        return to_route('communities.index');
     }
 
     public function destroy(Community $community)
     {
-        abort_if($community->user_id != auth()->id(), 403);
+        $this->authorize(CommunityPolicy::DELETE, $community);
 
         $community->delete();
 
-        return to_route('communities.index')->with('message', 'Successfully deleted');
+        $this->success('Successfully deleted');
+        return to_route('communities.index');
+    }
+
+    public function join(Community $community)
+    {
+        $this->authorize(CommunityPolicy::JOIN, $community);
+
+        $community->users()->attach(auth()->id());
+
+        $this->success('Successfully joined');
+        return to_route('communities.show', $community);
+    }
+
+    public function leave(Community $community)
+    {
+        $this->authorize(CommunityPolicy::LEAVE, $community);
+
+        $community->users()->detach(auth()->id());
+
+        $this->success('Successfully left');
+        return to_route('communities.show', $community);
     }
 }
