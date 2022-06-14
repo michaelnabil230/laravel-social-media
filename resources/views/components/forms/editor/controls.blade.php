@@ -1,4 +1,4 @@
-<ul class="flex items-center gap-x-5">
+<ul class="flex flex-wrap items-center gap-1">
     <li class="flex">
         <x-forms.editor.control-button title="Heading" icon="fa-solid fa-heading" control="header" />
     </li>

@@ -12,7 +12,13 @@ class PostController extends Controller
 {
     public function create()
     {
-        $communities = Community::all();
+        $communities = Community::query()
+            ->unless(auth()->user()->is_admin, function ($query) {
+                return $query
+                    ->where('user_id', auth()->id())
+                    ->orWhereRelation('users', 'user_id', auth()->id());
+            })
+            ->get();
 
         return view('posts.create', compact('communities'));
     }
@@ -21,16 +27,14 @@ class PostController extends Controller
     {
         $validated = $request->validated();
 
-        $validated['user_id'] = auth()->id();
-
-        $post = Post::create($validated);
+        $post = Post::create($validated + ['user_id' => auth()->id()]);
 
         return to_route('posts.show', $post);
     }
 
     public function show(Post $post)
     {
-        $post->load('comments.user', 'community');
+        $post->load('comments.user');
 
         return view('posts.show', compact('post'));
     }

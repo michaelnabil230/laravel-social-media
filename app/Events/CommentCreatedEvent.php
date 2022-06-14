@@ -2,32 +2,32 @@
 
 namespace App\Events;
 
-use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostEvent implements ShouldBroadcast
+class CommentCreatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Post $post;
+    public $comment;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct(Comment $comment)
     {
-        $this->post = $post;
+        $this->comment = $comment;
     }
 
     public function broadcastAs()
     {
-        return 'post.created';
+        return 'comment.created.' . $this->comment->id;
     }
 
     /**

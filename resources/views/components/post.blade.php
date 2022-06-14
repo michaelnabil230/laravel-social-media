@@ -35,7 +35,8 @@
                         <path d="M12 5l7 7-7 7"></path>
                     </svg>
                 </a>
-                <span class="text-gray-400 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm">
+                <a href="{{ route('posts.show', $post) }}"
+                    class="text-gray-400 inline-flex items-center lg:ml-auto md:ml-0 ml-auto leading-none text-sm">
                     <svg class="w-4 h-4 mr-1" stroke="currentColor" stroke-width="2" fill="none"
                         stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                         <path
@@ -43,7 +44,7 @@
                         </path>
                     </svg>
                     {{ $post->comments_count }}
-                </span>
+                </a>
             </div>
         </div>
     </div>

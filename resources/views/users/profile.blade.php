@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="flex flex-col gap-y-4">
-                    @if ($user->id === Auth::id())
+                    @if ($user->id === auth()->id())
                         <x-buttons.secondary-button href="{{ route('settings.profile') }}" class="w-full">
                             <span class="flex items-center gap-x-2">
                                 <i class="fa-solid fa-pencil w-5 h-5"></i>
@@ -42,109 +42,102 @@
 
                     @can(\App\Policies\UserPolicy::BAN, $user)
                         @if ($user->is_banned)
-                            <x-buttons.secondary-button class="w-full" @click.prevent="activeModal = 'unbanUser'">
+                            <x-buttons.secondary-button class="w-full" x-on:click.prevent="activeModal = 'unbanUser'">
                                 <span class="flex items-center gap-x-2">
                                     <i class="fa-solid fa-check w-5 h-5"></i>
                                     Unban User
                                 </span>
                             </x-buttons.secondary-button>
+                            <x-modal identifier="unbanUser" :action="route('admin.users.unban', $user->username)" title="Unban {{ $user->username }}"
+                                type="update">
+                                <p>Unbanning this user will allow them to login again and post content.</p>
+                            </x-modal>
                         @else
-                            <x-buttons.danger-button class="w-full" @click.prevent="activeModal = 'banUser'">
+                            <x-buttons.danger-button class="w-full" x-on:click.prevent="activeModal = 'banUser'">
                                 <span class="flex items-center gap-x-2">
                                     {{-- <x-icon-hammer class="w-5 h-5" /> --}}
                                     Ban User
                                 </span>
                             </x-buttons.danger-button>
+                            <x-modal identifier="banUser" :action="route('admin.users.ban', $user->username)" title="Ban {{ $user->username }}" type="update">
+                                <p>Banning this user will prevent them from logging in, posting threads and replying to threads.
+                                </p>
+                            </x-modal>
                         @endif
                     @endcan
 
                     @can(\App\Policies\UserPolicy::DELETE, $user)
-                        <x-buttons.danger-button class="w-full" @click.prevent="activeModal = 'deleteUser'">
+                        <x-buttons.danger-button class="w-full" x-on:click.prevent="activeModal = 'deleteUser'">
                             <span class="flex items-center gap-x-2">
                                 <i class="fa-solid fa-trash w-5 h-5"></i>
                                 Delete User
                             </span>
                         </x-buttons.danger-button>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="w-full lg:w-2/3">
-                    <h2 class="text-3xl font-semibold">
-                        Statistics
-                    </h2>
-
-                    <div class="mt-4 grid grid-cols-1 lg:grid-cols-2">
-
-                        <div class="w-full flex justify-between px-5 py-2.5 bg-gray-100 lg:bg-white">
-                            <span>Comments</span>
-                            <span class="text-green-500">
-                                {{ number_format($user->comments_count) }}
-                            </span>
-                        </div>
-
-                        <div class="w-full flex justify-between px-5 py-2.5">
-                            <span>Posts</span>
-                            <span class="text-green-500">
-                                {{ number_format($user->posts_count) }}
-                            </span>
-                        </div>
-
-                        <div class="w-full flex justify-between px-5 py-2.5">
-                            <span>Join Communities</span>
-                            <span class="text-green-500">
-                                {{ number_format($user->join_communities_count) }}
-                            </span>
-                        </div>
-
-                        <div class="w-full flex justify-between px-5 py-2.5 bg-gray-100 lg:bg-white">
-                            <span>My Communities</span>
-                            <span class="text-green-500">
-                                {{ number_format($user->my_communities_count) }}
-                            </span>
-                        </div>
-                    </div>
+                        <x-modal identifier="deleteUser" :action="route('admin.users.delete', $user->username)" title="Delete {{ $user->username }}">
+                            <p>
+                                Are you sure you want to delete {{ $user->username }}?
+                            </p>
+                        </x-modal>
+                    @endcan
                 </div>
             </div>
 
-            @if ($posts->count() > 0)
-                <div class="mt-10 px-4 lg:mt-28">
-                    <h2 class="text-3xl font-semibold mb-2">
-                        Posts
-                    </h2>
-                    <div class="grid grid-cols-4 gap-4">
-                        @foreach ($posts as $post)
-                            <x-post :post="$post" />
-                        @endforeach
+            <div class="w-full lg:w-2/3">
+                <h2 class="text-3xl font-semibold">
+                    Statistics
+                </h2>
+
+                <div class="mt-4 grid grid-cols-1 lg:grid-cols-2">
+
+                    <div class="w-full flex justify-between px-5 py-2.5 bg-gray-100 lg:bg-white">
+                        <span>Comments</span>
+                        <span class="text-green-500">
+                            {{ number_format($user->comments_count) }}
+                        </span>
+                    </div>
+
+                    <div class="w-full flex justify-between px-5 py-2.5">
+                        <span>Posts</span>
+                        <span class="text-green-500">
+                            {{ number_format($user->posts_count) }}
+                        </span>
+                    </div>
+
+                    <div class="w-full flex justify-between px-5 py-2.5">
+                        <span>Join communities</span>
+                        <span class="text-green-500">
+                            {{ number_format($user->join_communities_count) }}
+                        </span>
+                    </div>
+
+                    <div class="w-full flex justify-between px-5 py-2.5 bg-gray-100 lg:bg-white">
+                        <span>Communities created</span>
+                        <span class="text-green-500">
+                            {{ number_format($user->my_communities_count) }}
+                        </span>
                     </div>
                 </div>
-            @else
-                <div class="mt-10 px-4 lg:mt-28">
-                    <h2 class="text-3xl font-semibold">
-                        No posts yet
-                    </h2>
-                </div>
-            @endif
+            </div>
         </div>
+    </div>
 
-        @can(App\Policies\UserPolicy::BAN, $user)
-            @if ($user->is_banned)
-                <x-modal identifier="unbanUser" :action="route('admin.users.unban', $user->username)" title="Unban {{ $user->username }}" type="update">
-                    <p>Unbanning this user will allow them to login again and post content.</p>
-                </x-modal>
-            @else
-                <x-modal identifier="banUser" :action="route('admin.users.ban', $user->username)" title="Ban {{ $user->username }}" type="update">
-                    <p>Banning this user will prevent them from logging in, posting threads and replying to threads.</p>
-                </x-modal>
-            @endif
-        @endcan
-
-        @can(App\Policies\UserPolicy::DELETE, $user)
-            <x-modal identifier="deleteUser" :action="route('admin.users.delete', $user->username)" title="Delete {{ $user->username }}">
-                <p>
-                    Deleting this user will remove their account and any related content like threads & replies. This cannot be
-                    undone.
-                </p>
-            </x-modal>
-        @endcan
-    @endsection
+    @if ($posts->count() > 0)
+        <div class="mt-10 px-4 lg:mt-28">
+            <h2 class="text-3xl font-semibold mb-2">
+                Posts
+            </h2>
+            <div class="grid grid-cols-4 gap-4">
+                @foreach ($posts as $post)
+                    <x-post :post="$post" />
+                @endforeach
+            </div>
+        </div>
+    @else
+        <div class="mt-10 px-4 lg:mt-28">
+            <h2 class="text-3xl font-semibold">
+                No posts yet
+            </h2>
+        </div>
+    @endif
+    </div>
+@endsection

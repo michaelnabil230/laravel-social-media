@@ -63,7 +63,6 @@ class MentionCommentNotification extends Notification implements ShouldQueue
         return [
             'type' => 'mention_comment',
             'comment' => $this->comment,
-            'post' => Post::find($this->comment->post_id),
         ];
     }
 }

@@ -17,11 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->foreignId('from_id')->constrained('users');
-            $table->foreignId('to_id')->constrained('users');
+            $table->foreignId('community_id')->constrained();
             $table->longText('body')->nullable();
-            $table->string('attachment')->nullable();
-            $table->boolean('seen')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

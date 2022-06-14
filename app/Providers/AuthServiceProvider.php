@@ -4,8 +4,13 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Comment;
+use App\Policies\PostPolicy;
+use App\Policies\UserPolicy;
+use App\Policies\CommentPolicy;
+use App\Policies\NotificationPolicy;
+use Illuminate\Notifications\DatabaseNotification as Notification;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +20,10 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Notification::class => NotificationPolicy::class,
+        User::class => UserPolicy::class,
+        Post::class => PostPolicy::class,
+        Comment::class => CommentPolicy::class,
     ];
 
     /**
@@ -26,13 +34,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        Gate::define('edit-post', function (User $user, Post $post) {
-            return $post->user_id == $user->id;
-        });
-
-        Gate::define('delete-post', function (User $user, Post $post) {
-            return $user->is_admin || in_array($user->id, [$post->user_id, $post->community->user_id]);
-        });
     }
 }

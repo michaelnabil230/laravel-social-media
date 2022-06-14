@@ -45,7 +45,7 @@ class Comment extends Model
 
     public function mentionedUsers(): Collection
     {
-        preg_match_all('/@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w))/', $this->comment, $matches);
+        preg_match_all('/@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w))/', $this->body, $matches);
 
         return User::whereIn('username', $matches[1])->get();
     }

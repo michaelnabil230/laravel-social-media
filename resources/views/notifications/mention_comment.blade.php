@@ -5,9 +5,9 @@
         <div class="flex items-center">
             <i class="fa-solid fa-reply w-5 h-5 mr-4"></i>
             <div>
-                A new comment was added to your post: 
-                <a href="{{ route('posts.show', $data['comment']['post_id']) }}"
-                    class="text-green-700">"{{ $data['post']['title'] }}"
+                You are mentioned in a comment on 
+                <a href="{{ route('posts.show', $data['comment']['post_id']) }}" class="text-green-700">
+                    "{{ $data['comment']['body'] }}"
                 </a>.
             </div>
         </div>

@@ -14,6 +14,6 @@ class PostObserver
      */
     public function created(Post $post)
     {
-        event(new \App\Events\PostEvent($post));
+        event(new \App\Events\PostCreatedEvent($post));
     }
 }

@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\CommunityController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MarkNotificationsController;
-use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\MarkNotificationsController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController as ProfileSettingsController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,14 @@ Route::get('p/{post}', [PostController::class, 'show'])->name('posts.show');
 
 // Users
 Route::get('u/{user:username?}', ProfileController::class)->name('profile');
+
+// Chat of the community
+Route::controller(ChatController::class)->group(function () {
+    Route::get('/chat/{community}', 'index')->name('communities.chat');
+    Route::get('/messages/{community}', 'fetchMessages');
+    Route::post('/send-message/{community}', 'sendMessage');
+    Route::delete('/delete-message/{message}', 'deleteMessage');
+});
 
 Route::middleware(['auth'])->group(function () {
 
@@ -67,8 +76,5 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::put('settings/password', [PasswordController::class, 'update'])->name('settings.password.update');
 });
-
-
-
 
 require __DIR__ . '/auth.php';

@@ -9,15 +9,15 @@
 
         <ul class="flex p-5 gap-x-4">
             <li>
-                <button type="button" @click="mode = 'write'"
-                    :class="{ 'text-green-500 border-green-500 border-b-2': mode === 'write' }">
+                <button type="button" x-on:click="mode = 'write'"
+                    x-bind:class="{ 'text-green-500 border-green-500 border-b-2': mode === 'write' }">
                     Write
                 </button>
             </li>
 
             <li>
-                <button type="button" @click="mode = 'preview'" wire:click="preview"
-                    :class="{ 'text-green-500 border-green-500 border-b-2': mode === 'preview' }">
+                <button type="button" x-on:click="mode = 'preview'" wire:click="preview"
+                    x-bind:class="{ 'text-green-500 border-green-500 border-b-2': mode === 'preview' }">
                     Preview
                 </button>
             </li>
@@ -32,7 +32,7 @@
                     @keydown.cmd.enter="submit($event)" @keydown.ctrl.enter="submit($event)" @keydown.space="showMentions = false"
                     @keydown.down="highlightNextUser(event)" @keydown.up="highlightPreviousUser(event)"
                     @keydown.enter="selectHighlightedUser(event)" @keydown.escape="showMentions = false"
-                    @click.away="showMentions = false" @keydown.debounce.500ms="updateUserSearch($event)"></textarea>
+                    x-on:click.away="showMentions = false" @keydown.debounce.500ms="updateUserSearch($event)"></textarea>
 
                 @if (count($users) > 0)
                     <ul x-cloak x-show="showUserListbox()" x-ref="users"
@@ -40,7 +40,7 @@
                         :style="`top: ${cursorTop}; left: ${cursorLeft}; display: ${showUserListbox() ? 'block' : 'none'}`"
                         tabindex="-1" role="listbox">
                         @foreach ($users as $user)
-                            <li @click.prevent="selectUser('{{ $user['username'] }}')" role="option"
+                            <li x-on:click.prevent="selectUser('{{ $user['username'] }}')" role="option"
                                 class="flex items-center gap-x-2 p-2 cursor-pointer hover:bg-green-100"
                                 data-username="{{ $user['username'] }}"
                                 aria-selected="{{ $loop->first ? 'true' : 'false' }}">
@@ -60,7 +60,8 @@
             <div class="flex flex-col items-center justify-end gap-y-4 gap-x-5 p-5 md:flex-row">
                 <x-forms.editor.controls />
                 @if ($hasButton)
-                    <x-buttons.primary-cta type="{{ $buttonType }}" class="w-full md:w-auto" @click.prevent="submit">
+                    <x-buttons.primary-cta type="{{ $buttonType }}" class="w-full md:w-auto"
+                        x-on:click.prevent="submit">
                         <span class="flex items-center">
                             {{ $buttonLabel }}
 

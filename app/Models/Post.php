@@ -89,7 +89,7 @@ class Post extends Model
 
     public function mentionedUsers(): Collection
     {
-        preg_match_all('/@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w))/', $this->post, $matches);
+        preg_match_all('/@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w))/', $this->body, $matches);
 
         return User::whereIn('username', $matches[1])->get();
     }

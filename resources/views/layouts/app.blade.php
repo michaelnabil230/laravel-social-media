@@ -10,13 +10,15 @@
         {{ config('app.name', 'Laravel') }}
     </title>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     @livewireStyles
 
 </head>
 
-<body class="bg-gray-50 text-gray-600 body-font" :class="{ 'overflow-hidden': lockScroll }" x-data="{ lockScroll: false, activeModal: false }"
+<body class="bg-gray-50 text-gray-600 body-font" x-bind:class="{ 'overflow-hidden': lockScroll }" x-data="{ lockScroll: false, activeModal: false }"
     @keyup.escape="activeModal = false">
     <header x-data="{ nav: false }" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
         <div class="px-4 py-5 mx-auto space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:space-x-10">
@@ -27,7 +29,7 @@
                     </p>
                 </a>
                 <div class="flex items-center space-x-2 lg:hidden">
-                    <button @click="nav=!nav"
+                    <button x-on:click="nav=!nav"
                         class="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800 focus:outline-none">
                         <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 text-gray-700 dark:text-gray-300">
                             <path fill-rule="evenodd"
@@ -48,7 +50,16 @@
                         class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
                         Communities
                     </a>
+                    <a href="{{ route('posts.create') }}"
+                        class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                        Create Post
+                    </a>
                     @auth
+                        <a href="{{ route('notifications') }}"
+                            class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                            <i class="fa-solid fa-bell"></i>
+                            <span>Notifications</span>
+                        </a>
                         <div class="flex flex-col space-y-3 lg:hidden">
                             <a href="{{ route('settings.profile') }}"
                                 class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400">
@@ -104,6 +115,10 @@
                         class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
                         Communities
                     </a>
+                    <a href="{{ route('posts.create') }}"
+                        class="text-gray-500 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-300">
+                        Create Post
+                    </a>
                 </div>
                 <div class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4">
                     <button type="button" aria-label="Color Mode"
@@ -118,9 +133,13 @@
                             class="w-full h-12 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg lg:w-20 xl:transition-all xl:duration-300 xl:w-36 xl:focus:w-44 lg:h-10 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-green-500 dark:focus:border-green-500 focus:outline-none focus:ring focus:ring-green-500 dark:placeholder-gray-400 focus:ring-opacity-20">
                     </form>
                     @auth
+                        <a href="{{ route('notifications') }}" class="hover:text-green-600">
+                            <i class="fa-solid fa-bell"></i>
+                        </a>
                         <div class="relative lg:inline-block" x-data="{ dropDown: false }">
                             <div>
-                                <button @click="dropDown=!dropDown" class="flex items-center space-x-2 focus:outline-none">
+                                <button x-on:click="dropDown=!dropDown"
+                                    class="flex items-center space-x-2 focus:outline-none">
                                     <img src="https://www.gravatar.com/avatar/d9b562166e42a7cff1422818760c9e43"
                                         class="object-cover w-8 h-8 rounded-full xl:w-10 xl:h-10">
                                     <span class="font-medium text-gray-800 dark:text-gray-200 lg:hidden">
@@ -128,7 +147,7 @@
                                     </span>
                                 </button>
                             </div>
-                            <div :class="{ 'hidden': !dropDown }"
+                            <div x-bind:class="{ 'hidden': !dropDown }"
                                 class="absolute left-0 z-20 py-1 mt-2 bg-white border border-gray-100 rounded-md shadow-xl dark:border-gray-700 lg:left-auto lg:right-0 dark:bg-gray-800">
                                 <div class="w-48">
                                     <a href="{{ route('profile', auth()->user()->username) }}"
@@ -174,7 +193,7 @@
         </div>
     </header>
 
-    <div class="container mx-auto">
+    <div id="app" class="container mx-auto">
         @include('layouts._alerts')
         @yield('content')
     </div>
@@ -187,12 +206,10 @@
     <script type="text/javascript">
         window.Echo.channel("public-channel")
             .listen('.post.created', (e) => {
-                console.log(e);
-            })
-            .listen('.comment.created', (e) => {
-                console.log(e);
+                alert('New post created' + e.post.title);
             });
     </script>
+    @stack('scripts')
 </body>
 
 </html>

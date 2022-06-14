@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\CommentEvent;
-use App\Events\PostEvent;
+use App\Events\CommentCreatedEvent;
+use App\Events\PostCreatedEvent;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,10 +19,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        PostEvent::class => [
+        App\Events\MessageCreatedEvent::class => [],
+        PostCreatedEvent::class => [
             \App\Listeners\NotifyUsersMentionedInPost::class,
         ],
-        CommentEvent::class => [
+        CommentCreatedEvent::class => [
             \App\Listeners\NotifyUsersMentionedInComment::class,
         ],
     ];

@@ -5,9 +5,9 @@
         <div class="flex items-center">
             <i class="fa-solid fa-reply w-5 h-5 mr-4"></i>
             <div>
-                You are mentioned in a post on {{ $data['post']['title'] }}
+                You are mentioned in a post on 
                 <a href="{{ route('posts.show', $data['post']['id']) }}" class="text-green-700">
-                    show post now
+                    "{{ $data['post']['title'] }}"
                 </a>.
             </div>
         </div>

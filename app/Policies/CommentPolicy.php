@@ -13,17 +13,11 @@ class CommentPolicy
 
     const DELETE = 'delete';
 
-    /**
-     * Determine if the given comment can be updated by the user.
-     */
     public function update(User $user, Comment $comment): bool
     {
         return $comment->user_id == $user->id || $user->is_admin;
     }
 
-    /**
-     * Determine if the given comment can be deleted by the user.
-     */
     public function delete(User $user, Comment $comment): bool
     {
         return $comment->user_id == $user->id || $user->is_admin;

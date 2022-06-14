@@ -15,6 +15,8 @@ class CommunityPolicy
 
     const LEAVE = 'leave';
 
+    const CREATE = 'create';
+
     public function update(User $user, Community $community): bool
     {
         return $community->user_id == $user->id || $user->is_admin;
@@ -27,11 +29,16 @@ class CommunityPolicy
 
     public function join(User $user, Community $community): bool
     {
-        return ! $community->users()->where('user_id', $user->id)->exists();
+        return $community->user_id != $user->id and !$community->users()->where('user_id', $user->id)->exists();
     }
 
     public function leave(User $user, Community $community): bool
     {
         return $community->users()->where('user_id', $user->id)->exists();
+    }
+
+    public function create(User $user, Community $community): bool
+    {
+        return $user->is_admin || $this->join($user, $community);
     }
 }

@@ -25,22 +25,23 @@
                 @endif
 
                 @can(App\Policies\CommentPolicy::UPDATE, $comment)
-                    <div class="relative -mr-3" x-data="{ open: false }" @click.outside="open = false">
+                    <div class="relative -mr-3" x-data="{ open: false }" x-on:click.outside="open = false">
 
-                        <button class="p-2 rounded hover:bg-gray-100" @click="open = !open">
+                        <button class="p-2 rounded hover:bg-gray-100" x-on:click="open = !open">
                             <i class="fa-solid fa-ellipsis-vertical w-6 h-6"></i>
                         </button>
 
                         <div x-cloak x-show="open"
                             class="absolute top-12 right-1 flex flex-col bg-white rounded shadow w-48 z-10">
 
-                            <button class="flex gap-x-2 p-3 rounded hover:bg-gray-100" @click="edit = !edit; open = false;">
+                            <button class="flex gap-x-2 p-3 rounded hover:bg-gray-100"
+                                x-on:click="edit = !edit; open = false;">
                                 <i class="fa-solid fa-pencil w-6 h-6"></i>
                                 <span x-text="edit ? 'Cancel editing' : 'Edit'"></span>
                             </button>
 
                             <button class="flex gap-x-2 p-3 rounded hover:bg-gray-100"
-                                @click="activeModal = 'deleteComment-{{ $comment->id }}'">
+                                x-on:click="activeModal = 'deleteComment-{{ $comment->id }}'">
                                 <i class="fa-solid fa-trash w-6 h-6 text-red-500"></i>
                                 Delete
                             </button>

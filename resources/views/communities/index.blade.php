@@ -12,7 +12,7 @@
         <div class="relative mx-auto px-2 focus:outline-none mt-4" x-data="{ showMore: false, showLassMore: false }"
             @scroll.window="showLassMore = (window.pageYOffset > 800) ? true : false">
             <div class="grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3"
-                :class="{ 'max-h-[120vh] overflow-hidden': !showMore }">
+                x-bind:class="{ 'max-h-[120vh] overflow-hidden': !showMore }">
                 @foreach ($communities->chunk(3) as $communitiesGroup)
                     <ul class="space-y-8">
                         @foreach ($communitiesGroup as $community)
@@ -36,14 +36,14 @@
             </div>
             <div x-show="!showMore" x-cloak
                 class="inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-white pt-32 pb-8 pointer-events-none dark:from-green-900 absolute">
-                <button @click="showMore = !showMore" type="button"
+                <button x-on:click="showMore = !showMore" type="button"
                     class="relative bg-green-900 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center dark:bg-green-700 dark:hover:bg-green-600 pointer-events-auto">
                     Show more...
                 </button>
             </div>
-            <div x-show="showMore" x-cloak :class="{ 'opacity-100': showLassMore, 'opacity-0': !showLassMore }"
+            <div x-show="showMore" x-cloak x-bind:class="{ 'opacity-100': showLassMore, 'opacity-0': !showLassMore }"
                 class="inset-x-0 bottom-4 flex justify-center bg-gradient-to-t from-white pt-32 pb-8 pointer-events-none dark:from-green-900 sticky -mt-52 transition-opacity duration-300">
-                <button type="button" :class="{ 'pointer-events-auto': showLassMore }"
+                <button type="button" x-bind:class="{ 'pointer-events-auto': showLassMore }"
                     class="relative bg-green-900 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 text-sm text-white font-semibold h-12 px-6 rounded-lg flex items-center dark:bg-green-700 dark:hover:bg-green-600 transition-transform translate-y-4">
                     Okay, I get the point
                 </button>

@@ -32,7 +32,7 @@ class PostReportNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database','mail'];
     }
 
     /**
@@ -47,5 +47,19 @@ class PostReportNotification extends Notification implements ShouldQueue
             ->line('Post in your community has been flagged')
             ->action('View Post', route('posts.show', $this->post))
             ->line('Thank you for using our application!');
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            'type' => 'report_post',
+            'post' => $this->post,
+        ];
     }
 }

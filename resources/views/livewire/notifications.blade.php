@@ -12,7 +12,7 @@
 
         @if ($notificationCount)
             <div class="mt-4 flex md:mt-0 md:ml-4">
-                <button @click="activeModal = 'markAllAsRead'"
+                <button x-on:click="activeModal = 'markAllAsRead'"
                     class="bg-white border border-gray-200 rounded py-2 px-4 inline-flex justify-center text-sm text-gray-900 hover:bg-gray-100 font-medium">
                     <i class="fa-solid fa-check w-5 h-5 mr-1"></i>
                     Clear All

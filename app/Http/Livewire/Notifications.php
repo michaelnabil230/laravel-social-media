@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use App\Policies\NotificationPolicy;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -20,13 +19,13 @@ class Notifications extends Component
     public function render(): View
     {
         return view('livewire.notifications', [
-            'notifications' => auth()->user()->unreadNotifications()->paginate(10),
+            'notifications' => auth()->user()->unreadNotifications()->paginate(),
         ]);
     }
 
     public function mount(): void
     {
-        abort_if(Auth::guest(), 403);
+        abort_if(auth()->guest(), 403);
 
         $this->notificationCount = auth()->user()->unreadNotifications()->count();
     }

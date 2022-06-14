@@ -14,6 +14,8 @@ class PostsSeeder extends Seeder
      */
     public function run()
     {
-        Post::factory()->times(500)->create();
+        Post::withoutEvents(function () {
+            Post::factory()->times(500)->create();
+        });
     }
 }

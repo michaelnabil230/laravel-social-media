@@ -2,51 +2,54 @@
 
 namespace App\Models;
 
-use App\Observers\MessageObserver;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Community;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Message extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
-     * The "booted" method of the model.
+     * The attributes that are mass assignable.
      *
-     * @return void
+     * @var array<int, string>
      */
-    protected static function booted()
+    protected $fillable = [
+        'type',
+        'from_id',
+        'community_id',
+        'body',
+    ];
+
+    /**
+     * Get the user that owns the Message
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        self::observe(MessageObserver::class);
+        return $this->belongsTo(User::class, 'from_id');
     }
 
     /**
-     * Default fetch messages query between a Sender and Receiver.
+     * Get the community that owns the Message
      *
-     * @param string $userId
-     * @return Message|\Illuminate\Database\Eloquent\Builder
+     * @return BelongsTo
      */
-    public function scopeFetchMessages($userId)
+    public function community(): BelongsTo
     {
-        return self::query()
-            ->where('from_id', auth()->id())
-            ->where('to_id', $userId)
-            ->orWhere('from_id', $userId)
-            ->where('to_id', auth()->id());
+        return $this->belongsTo(Community::class);
     }
 
-    /**
-     * Make messages between the sender [Auth user] and
-     * the receiver [User id] as seen.
-     *
-     * @param string $userId
-     * @return bool
-     */
-    public static function makeSeen($userId)
+    public function mentionedUsers(): Collection
     {
-        return self::Where('from_id', $userId)
-            ->where('to_id', auth()->id())
-            ->where('seen', 0)
-            ->update(['seen' => 1]);
+        preg_match_all('/@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}(?!\w))/', $this->body, $matches);
+
+        return User::whereIn('username', $matches[1])->get();
     }
 }

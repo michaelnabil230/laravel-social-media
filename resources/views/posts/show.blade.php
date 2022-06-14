@@ -11,20 +11,18 @@
                         <div class="border-b">
                             <div class="px-6 pt-4 pb-0 lg:py-4">
                                 <div class="flex flex-row justify-between items-start lg:items-center">
-                                    <div>
-                                        <div class="flex flex-col lg:flex-row lg:items-center">
-                                            <div class="flex items-center">
-                                                <a href="{{ route('profile', $post->user->username) }}"
-                                                    class="hover:underline">
-                                                    <span class="text-gray-900 mr-5">
-                                                        {{ $post->user->username }}
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <span class="font-mono text-gray-700 mt-1 lg:mt-0">
-                                                {{ $post->created_at->diffForHumans() }}
-                                            </span>
+                                    <div class="flex flex-col lg:flex-row lg:items-center">
+                                        <div class="flex items-center">
+                                            <a href="{{ route('profile', $post->user->username) }}"
+                                                class="hover:underline">
+                                                <span class="text-gray-900 mr-5">
+                                                    {{ $post->user->username }}
+                                                </span>
+                                            </a>
                                         </div>
+                                        <span class="font-mono text-gray-700 mt-1 lg:mt-0">
+                                            {{ $post->created_at->diffForHumans() }}
+                                        </span>
                                     </div>
 
                                     <div class="flex items-center gap-x-2">
@@ -37,8 +35,8 @@
                                         @canany([App\Policies\PostPolicy::UPDATE, App\Policies\PostPolicy::DELETE], $post)
                                             <div class="flex items-center gap-x-3">
                                                 <div class="relative -mr-3" x-data="{ open: false }"
-                                                    @click.outside="open = false">
-                                                    <button class="p-2 rounded hover:bg-gray-100" @click="open = !open">
+                                                    x-on:click.outside="open = false">
+                                                    <button class="p-2 rounded hover:bg-gray-100" x-on:click="open = !open">
                                                         <i class="fa-solid fa-ellipsis-vertical w-6 h-6"></i>
                                                     </button>
 
@@ -55,14 +53,13 @@
 
                                                         @can(App\Policies\PostPolicy::DELETE, $post)
                                                             <button class="flex gap-x-2 p-3 rounded hover:bg-gray-100"
-                                                                @click="activeModal = 'deletePost'">
+                                                                x-on:click="activeModal = 'deletePost'">
                                                                 <i class="fa-solid fa-trash w-6 h-6 text-red-500"></i>
                                                                 Delete
                                                             </button>
                                                             <x-modal identifier="deletePost" :action="route('posts.destroy', $post)" title="Delete Post">
-                                                                <p>Are you sure you want to delete this post and its replies? This
-                                                                    cannot be
-                                                                    undone.
+                                                                <p>
+                                                                    Are you sure you want to delete this post?
                                                                 </p>
                                                             </x-modal>
                                                         @endcan
@@ -81,7 +78,7 @@
 
                         <div class="px-6 pb-6">
                             @can(App\Policies\PostPolicy::REPORT, $post)
-                                <x-buttons.primary-button @click="activeModal = 'reportPost'">
+                                <x-buttons.primary-button x-on:click="activeModal = 'reportPost'">
                                     Report
                                 </x-buttons.primary-button>
                                 <x-modal identifier="reportPost" :action="route('posts.report', $post)" title="Report Post">
@@ -121,3 +118,12 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script type="text/javascript">
+        let postId = "{{ $post->id }}";
+        window.Echo.channel("public-channel")
+            .listen('.comment.created.' + postId, (e) => {
+                alert('New comment' + e.comment.body);
+            });
+    </script>
+@endpush
