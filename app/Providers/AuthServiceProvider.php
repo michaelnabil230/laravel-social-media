@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\Comment;
-use App\Policies\PostPolicy;
-use App\Policies\UserPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\NotificationPolicy;
-use Illuminate\Notifications\DatabaseNotification as Notification;
+use App\Policies\PostPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\DatabaseNotification as Notification;
 
 class AuthServiceProvider extends ServiceProvider
 {

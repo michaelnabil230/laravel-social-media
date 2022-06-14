@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use App\Models\Comment;
-use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
