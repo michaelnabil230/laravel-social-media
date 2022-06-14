@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Traits\SendsAlerts;
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class RedirectIfBanned
 {
@@ -12,10 +11,10 @@ class RedirectIfBanned
 
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_banned) {
+        if (auth()->check() && auth()->user()->is_banned) {
             $this->error('Errors you banned');
 
-            Auth::logout();
+            auth()->logout();
 
             return to_route('home');
         }

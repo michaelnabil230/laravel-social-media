@@ -47,9 +47,9 @@
                         </div>
                     </div>
 
-                    {{-- <x-modal identifier="deleteComment-{{ $comment->id }}" :action="route('posts.comments.delete', [$post, $comment])" title="Delete Reply">
-                        <p>Are you sure you want to delete this reply? This cannot be undone.</p>
-                    </x-modal> --}}
+                    <x-modal identifier="deleteComment-{{ $comment->id }}" :action="route('posts.comments.destroy', [$post, $comment])" title="Delete Comment">
+                        <p>Are you sure you want to delete this comment? This cannot be undone.</p>
+                    </x-modal>
                 @endcan
             </div>
         </div>

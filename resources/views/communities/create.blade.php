@@ -1,3 +1,5 @@
+@title('Create Community')
+
 @extends('layouts.app')
 
 @section('content')

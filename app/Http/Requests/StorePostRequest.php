@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\HttpImageRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
@@ -25,7 +26,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string', 'max:255', new HttpImageRule()],
             'community_id' => ['required', 'integer', 'exists:communities,id'],
         ];
     }

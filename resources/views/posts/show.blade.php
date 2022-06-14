@@ -1,3 +1,5 @@
+@title("Post | $post->title")
+
 @extends('layouts.app')
 
 @section('content')
@@ -57,16 +59,16 @@
                                                                 <i class="fa-solid fa-trash w-6 h-6 text-red-500"></i>
                                                                 Delete
                                                             </button>
+                                                            <x-modal identifier="deletePost" :action="route('posts.destroy', $post)" title="Delete Post">
+                                                                <p>Are you sure you want to delete this post and its replies? This
+                                                                    cannot be
+                                                                    undone.
+                                                                </p>
+                                                            </x-modal>
                                                         @endcan
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            {{-- <x-modal identifier="deletePost" :action="route('posts.delete', $post->id)" title="Delete Post">
-                                                <p>Are you sure you want to delete this post and its replies? This cannot be
-                                                    undone.
-                                                </p>
-                                            </x-modal> --}}
                                         @endcanany
                                     </div>
                                 </div>
@@ -78,7 +80,16 @@
                         </div>
 
                         <div class="px-6 pb-6">
-                            {{-- <livewire:like-thread :thread="$post" /> --}}
+                            @can(App\Policies\PostPolicy::REPORT, $post)
+                                <x-buttons.primary-button @click="activeModal = 'reportPost'">
+                                    Report
+                                </x-buttons.primary-button>
+                                <x-modal identifier="reportPost" :action="route('posts.report', $post)" title="Report Post">
+                                    <p>
+                                        Are you sure you want to report this post?
+                                    </p>
+                                </x-modal>
+                            @endcan
                         </div>
                     </div>
 
@@ -99,31 +110,14 @@
                 </p>
             @else
                 <div class="my-8">
-                    <form action="{{ route('posts.comments.store', $post) }}" method="POST">
+                    <form action="{{ route('posts.comments.store', $post) }}" method="POST"
+                        @submitted="$event.currentTarget.submit()">
                         @csrf
                         <livewire:editor hasMentions hasButton buttonIcon="send" label="Write a post"
                             buttonLabel="Write a comment" />
                     </form>
                 </div>
             @endguest
-        </div>
-
-        <div class="w-full lg:w-1/4">
-            {{-- @include('layouts._ads._forum_sidebar')
-
-            <div class="mt-6">
-                <x-users.profile-block :user="$post->author()" />
-            </div>
-
-            @auth
-                <div class="mt-6">
-                    <x-threads.subscribe :thread="$post" />
-                </div>
-            @endauth
-
-            <div class="my-6">
-                <x-moderators :moderators="$moderators" />
-            </div> --}}
         </div>
     </section>
 @endsection

@@ -1,4 +1,4 @@
-@title('Users')
+@title('Notifications')
 
 @extends('layouts.app')
 

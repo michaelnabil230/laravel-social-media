@@ -63,7 +63,7 @@
                 </div>
             </div>
             @foreach ($posts as $post)
-                <x-post class="pt-3" :post="$post" />
+                <x-post :post="$post" />
             @endforeach
         </div>
     </div>

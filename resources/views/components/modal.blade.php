@@ -1,5 +1,5 @@
 @push('modals')
-    <div class="modal " x-show="activeModal == '{{ $identifier }}'" x-cloak>
+    <div class="modal" x-show="activeModal == '{{ $identifier }}'" x-cloak>
         <div class="modal-content" @click.outside="activeModal = false">
             <form action="{{ $action }}" method="{{ $method() }}">
                 @csrf

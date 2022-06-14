@@ -1,3 +1,5 @@
+@title('All Communities')
+
 @extends('layouts.app')
 
 @section('content')

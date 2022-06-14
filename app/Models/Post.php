@@ -23,7 +23,7 @@ class Post extends Model
         'community_id',
         'user_id',
         'title',
-        'post',
+        'body',
         'votes',
     ];
 

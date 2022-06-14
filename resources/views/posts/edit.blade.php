@@ -1,3 +1,5 @@
+@title("Edit Post | $post->title")
+
 @extends('layouts.app')
 
 @section('content')

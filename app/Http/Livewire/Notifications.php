@@ -20,7 +20,7 @@ class Notifications extends Component
     public function render(): View
     {
         return view('livewire.notifications', [
-            'notifications' => Auth::user()->unreadNotifications()->paginate(10),
+            'notifications' => auth()->user()->unreadNotifications()->paginate(10),
         ]);
     }
 
@@ -28,7 +28,7 @@ class Notifications extends Component
     {
         abort_if(Auth::guest(), 403);
 
-        $this->notificationCount = Auth::user()->unreadNotifications()->count();
+        $this->notificationCount = auth()->user()->unreadNotifications()->count();
     }
 
     public function markAsRead(string $notificationId): void

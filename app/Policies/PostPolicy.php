@@ -11,6 +11,8 @@ class PostPolicy
 
     const DELETE = 'delete';
 
+    const REPORT = 'report';
+
     public function update(User $user, Post $post): bool
     {
         return $post->user_id == $user->id || $user->is_admin;
@@ -19,5 +21,10 @@ class PostPolicy
     public function delete(User $user, Post $post): bool
     {
         return $post->user_id == $user->id || $user->is_admin;
+    }
+
+    public function report(User $user, Post $post): bool
+    {
+        return $post->user_id != $user->id;
     }
 }

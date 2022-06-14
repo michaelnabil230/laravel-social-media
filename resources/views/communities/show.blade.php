@@ -1,3 +1,5 @@
+@title("Community | $community->name")
+
 @extends('layouts.app')
 
 @section('content')
@@ -45,7 +47,7 @@
         </div>
         @if ($posts->count() > 0)
             @foreach ($posts as $post)
-                <x-post class="pt-3" :post="$post" />
+                <x-post :post="$post" />
             @endforeach
 
             {{ $posts->links() }}

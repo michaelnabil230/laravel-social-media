@@ -39,19 +39,18 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('verified')->group(function () {
         Route::resource('communities', CommunityController::class)->except(['show', 'index']);
 
-        Route::post('posts/{post}/report', [PostController::class, 'report'])->name('post.report');
+        Route::post('posts/{post}/report', [PostController::class, 'report'])->name('posts.report');
         Route::resource('posts', PostController::class)->except(['show', 'index']);
-        Route::resource('posts.comments', PostCommentController::class)->only(['store', 'delete']);
-
+        Route::resource('posts.comments', PostCommentController::class)->only(['store', 'destroy']);
 
         // Admin
         Route::middleware('verifyAdmins')->prefix('admin')->name('admin.')->group(function () {
             Route::controller(UserController::class)->name('users.')->group(function () {
                 // Users
                 Route::get('users', 'index')->name('index');
-                Route::put('users/{username}/ban', 'ban')->name('ban');
-                Route::put('users/{username}/unban', 'unban')->name('unban');
-                Route::delete('users/{username}', 'delete')->name('delete');
+                Route::put('users/{user:username}/ban', 'ban')->name('ban');
+                Route::put('users/{user:username}/unban', 'unban')->name('unban');
+                Route::delete('users/{user:username}', 'delete')->name('delete');
             });
         });
     });

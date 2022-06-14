@@ -1,4 +1,4 @@
-@unless(Auth::user()->is_admin)
+@unless(auth()->user()->is_admin)
     <section aria-labelledby="remove_account_heading" class="mt-6">
         <div class="shadow sm:rounded-md sm:overflow-hidden">
             <div class="bg-white py-6 px-4 space-y-6 sm:p-6">

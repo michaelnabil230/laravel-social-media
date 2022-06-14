@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Http\Requests\UpdateCommentRequest;
+use App\Http\Requests\CommentRequest;
 use App\Policies\CommentPolicy;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -27,7 +27,7 @@ class EditComment extends Component
         $this->body = $body;
         $this->authorize(CommentPolicy::UPDATE, $this->comment);
 
-        $this->validate((new UpdateCommentRequest())->rules());
+        $this->validate((new CommentRequest())->rules());
 
         $this->comment->update([
             'body' => $this->body,

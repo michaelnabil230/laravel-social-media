@@ -1,4 +1,4 @@
-<div class="{{ $class ?? '' }}">
+<div class="{{ $class ?? '' }} pt-3">
     <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
         <a href="{{ route('profile', $post->user) }}" class="inline-flex items-center pl-6 pt-6">
             <img alt="blog" src="https://dummyimage.com/103x103"

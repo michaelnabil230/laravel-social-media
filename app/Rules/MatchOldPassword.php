@@ -31,7 +31,7 @@ class MatchOldPassword implements Rule
      * @param mixed $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         return Hash::check($value, $this->oldPassword);
     }
@@ -41,7 +41,7 @@ class MatchOldPassword implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'The :attribute is match with old password.';
     }

@@ -1,3 +1,5 @@
+@title('Create Post')
+
 @extends('layouts.app')
 
 @section('content')

@@ -6,20 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
     public function edit()
     {
-        $posts = Auth::user()->posts()->latest()->get();
+        $posts = auth()->user()->posts()->latest()->get();
 
         return view('users.settings.settings', compact('posts'));
     }
 
     public function update(UpdateProfileRequest $request)
     {
-        Auth::user()->update($request->validated());
+        auth()->user()->update($request->validated());
 
         $this->success('settings.updated');
 
